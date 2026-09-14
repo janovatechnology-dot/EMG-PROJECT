@@ -32,7 +32,7 @@ const firebaseConfig = {
 
     // 🔴 IMPORTANT:
     // Replace this with your Firebase Realtime Database URL
-    databaseURL: "YOUR_REALTIME_DATABASE_URL",
+    databaseURL: "https://janova-care-default-rtdb.firebaseio.com",
 
     projectId: "janova-care",
 
