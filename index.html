@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Janova Care | Patient Assistant</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Animated Background -->
+    <div class="background">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+
+        <div class="grid"></div>
+    </div>
+
+
+    <!-- APP -->
+    <div class="app-container">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    J
+                </div>
+
+                <div>
+                    <h1>JANOVA</h1>
+                    <span>TECHNOLOGIES</span>
+                </div>
+
+            </div>
+
+
+            <div class="connection">
+
+                <span class="status-dot"></span>
+
+                <span id="connectionText">
+                    ESP32 ONLINE
+                </span>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- WELCOME -->
+        <section class="welcome">
+
+            <p class="small-title">
+                JANOVA TECHNOLOGIES
+            </p>
+
+            <h2>
+                Patient
+                <span>Care Assistant</span>
+            </h2>
+
+            <p class="description">
+                Real-time communication system powered by
+                EMG signals & smart technology.
+            </p>
+
+        </section>
+
+
+
+        <!-- PATIENT CARD -->
+        <section class="patient-card">
+
+            <div class="patient-info">
+
+                <div class="patient-avatar">
+                    👤
+                </div>
+
+                <div>
+
+                    <span class="label">
+                        PATIENT
+                    </span>
+
+                    <h3>
+                        Patient 01
+                    </h3>
+
+                    <p>
+                        EMG Communication System
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="live-status">
+
+                <span class="pulse"></span>
+
+                <span>
+                    LIVE MONITORING
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- MAIN ALERT -->
+        <section class="alert-section">
+
+            <div class="alert-card" id="alertCard">
+
+                <div class="alert-icon" id="alertIcon">
+                    🟢
+                </div>
+
+                <div class="alert-content">
+
+                    <span class="alert-label">
+                        CURRENT STATUS
+                    </span>
+
+                    <h2 id="message">
+                        SYSTEM READY
+                    </h2>
+
+                    <p id="messageDescription">
+                        Waiting for patient signal...
+                    </p>
+
+                </div>
+
+                <div class="alert-time" id="alertTime">
+                    --:--
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- QUICK COMMANDS -->
+        <section class="commands">
+
+            <div class="section-title">
+
+                <div>
+                    <span>EMG COMMANDS</span>
+                    <h2>Communication Panel</h2>
+                </div>
+
+                <div class="live-badge">
+                    ● LIVE
+                </div>
+
+            </div>
+
+
+            <div class="command-grid">
+
+
+                <!-- HELP -->
+                <button class="command help"
+                        onclick="simulateCommand('HELP')">
+
+                    <div class="command-number">
+                        01
+                    </div>
+
+                    <div class="command-icon">
+                        🆘
+                    </div>
+
+                    <div class="command-name">
+                        HELP
+                    </div>
+
+                    <div class="command-description">
+                        Emergency assistance
+                    </div>
+
+                </button>
+
+
+
+                <!-- WATER -->
+                <button class="command water"
+                        onclick="simulateCommand('WATER')">
+
+                    <div class="command-number">
+                        02
+                    </div>
+
+                    <div class="command-icon">
+                        💧
+                    </div>
+
+                    <div class="command-name">
+                        WATER
+                    </div>
+
+                    <div class="command-description">
+                        Patient needs water
+                    </div>
+
+                </button>
+
+
+
+                <!-- FOOD -->
+                <button class="command food"
+                        onclick="simulateCommand('FOOD')">
+
+                    <div class="command-number">
+                        03
+                    </div>
+
+                    <div class="command-icon">
+                        🍽️
+                    </div>
+
+                    <div class="command-name">
+                        FOOD
+                    </div>
+
+                    <div class="command-description">
+                        Patient needs food
+                    </div>
+
+                </button>
+
+
+
+                <!-- YES -->
+                <button class="command yes"
+                        onclick="simulateCommand('YES')">
+
+                    <div class="command-number">
+                        04
+                    </div>
+
+                    <div class="command-icon">
+                        ✅
+                    </div>
+
+                    <div class="command-name">
+                        YES
+                    </div>
+
+                    <div class="command-description">
+                        Positive response
+                    </div>
+
+                </button>
+
+
+
+                <!-- NO -->
+                <button class="command no"
+                        onclick="simulateCommand('NO')">
+
+                    <div class="command-number">
+                        05
+                    </div>
+
+                    <div class="command-icon">
+                        ❌
+                    </div>
+
+                    <div class="command-name">
+                        NO
+                    </div>
+
+                    <div class="command-description">
+                        Negative response
+                    </div>
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SYSTEM INFO -->
+        <section class="system-panel">
+
+            <div class="system-item">
+
+                <span>DEVICE</span>
+
+                <strong>
+                    ESP32
+                </strong>
+
+            </div>
+
+
+            <div class="system-item">
+
+                <span>SENSOR</span>
+
+                <strong>
+                    EMG V3.0
+                </strong>
+
+            </div>
+
+
+            <div class="system-item">
+
+                <span>NETWORK</span>
+
+                <strong id="networkStatus">
+                    ONLINE
+                </strong>
+
+            </div>
+
+
+            <div class="system-item">
+
+                <span>JANOVA ID</span>
+
+                <strong>
+                    JC-001
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <div>
+                © 2026 JANOVA TECHNOLOGIES
+            </div>
+
+            <div>
+                Intelligent Assistive Communication
+            </div>
+
+        </footer>
+
+    </div>
+
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+
+        <div class="notification-icon">
+            🔔
+        </div>
+
+        <div>
+
+            <strong id="notificationTitle">
+                Patient Alert
+            </strong>
+
+            <p id="notificationText">
+                New patient request
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
