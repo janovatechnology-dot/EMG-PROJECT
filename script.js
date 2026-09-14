@@ -1,9 +1,66 @@
-/* =========================================
-   JANOVA TECHNOLOGIES
-   PATIENT CARE ASSISTANT
-   Frontend Demo
-========================================= */
+// ======================================================
+// JANOVA TECHNOLOGIES
+// PATIENT CARE ASSISTANT
+// Firebase Realtime Database + UI
+// ======================================================
 
+
+// ======================================================
+// FIREBASE IMPORTS
+// ======================================================
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+
+import {
+    getDatabase,
+    ref,
+    onValue
+}
+from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+
+
+// ======================================================
+// FIREBASE CONFIGURATION
+// ======================================================
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyDP5wgQ7TK5m_PTZKLEnVzTJpVmiN52w04",
+
+    authDomain: "janova-care.firebaseapp.com",
+
+    // 🔴 IMPORTANT:
+    // Replace this with your Firebase Realtime Database URL
+    databaseURL: "YOUR_REALTIME_DATABASE_URL",
+
+    projectId: "janova-care",
+
+    storageBucket: "janova-care.firebasestorage.app",
+
+    messagingSenderId: "393749596699",
+
+    appId: "1:393749596699:web:1ec79c92f83976e02a06be"
+};
+
+
+// ======================================================
+// INITIALIZE FIREBASE
+// ======================================================
+
+const app = initializeApp(firebaseConfig);
+
+
+// ======================================================
+// INITIALIZE REALTIME DATABASE
+// ======================================================
+
+const db = getDatabase(app);
+
+
+// ======================================================
+// HTML ELEMENTS
+// ======================================================
 
 const messageElement =
     document.getElementById("message");
@@ -29,9 +86,16 @@ const notificationTitle =
 const notificationText =
     document.getElementById("notificationText");
 
+const connectionText =
+    document.getElementById("connectionText");
+
+const networkStatus =
+    document.getElementById("networkStatus");
 
 
-/* COMMAND INFORMATION */
+// ======================================================
+// COMMAND INFORMATION
+// ======================================================
 
 const commands = {
 
@@ -46,6 +110,7 @@ const commands = {
 
     },
 
+
     WATER: {
 
         icon: "💧",
@@ -56,6 +121,7 @@ const commands = {
             "Patient needs water."
 
     },
+
 
     FOOD: {
 
@@ -68,6 +134,7 @@ const commands = {
 
     },
 
+
     YES: {
 
         icon: "✅",
@@ -78,6 +145,7 @@ const commands = {
             "Patient responded YES."
 
     },
+
 
     NO: {
 
@@ -93,8 +161,9 @@ const commands = {
 };
 
 
-
-/* UPDATE TIME */
+// ======================================================
+// GET CURRENT TIME
+// ======================================================
 
 function getTime() {
 
@@ -111,16 +180,28 @@ function getTime() {
 }
 
 
-
-/* SHOW COMMAND */
+// ======================================================
+// SHOW COMMAND ON SCREEN
+// ======================================================
 
 function showCommand(command) {
 
     const data =
         commands[command];
 
-    if (!data) return;
+    if (!data) {
 
+        console.log(
+            "Unknown command:",
+            command
+        );
+
+        return;
+
+    }
+
+
+    // Update main alert
 
     messageElement.textContent =
         data.title;
@@ -135,39 +216,54 @@ function showCommand(command) {
         getTime();
 
 
-    /* Animation */
+    // Small animation
 
-    alertCard.style.transform =
-        "scale(0.98)";
-
-    setTimeout(() => {
+    if (alertCard) {
 
         alertCard.style.transform =
-            "scale(1)";
+            "scale(0.97)";
 
-    }, 150);
+        setTimeout(() => {
+
+            alertCard.style.transform =
+                "scale(1)";
+
+        }, 150);
+
+    }
 
 
-    /* Notification */
+    // Show notification
 
     showNotification(
         command,
         data.description
     );
 
+
+    console.log(
+        "JANOVA PATIENT COMMAND:",
+        command
+    );
+
 }
 
 
-
-/* NOTIFICATION */
+// ======================================================
+// SHOW APP NOTIFICATION
+// ======================================================
 
 function showNotification(
     title,
     text
 ) {
 
+    if (!notification) return;
+
+
     notificationTitle.textContent =
         "Patient Alert";
+
 
     notificationText.textContent =
         `${title} — ${text}`;
@@ -189,60 +285,33 @@ function showNotification(
 }
 
 
-
-/* DEMO BUTTON */
+// ======================================================
+// DEMO BUTTON
+// ======================================================
 
 function simulateCommand(command) {
 
     console.log(
-        "JANOVA COMMAND:",
+        "DEMO COMMAND:",
         command
     );
 
-    showCommand(command);
+
+    showCommand(
+        command
+    );
 
 }
 
 
-
-/* INITIAL STATUS */
-
-window.addEventListener(
-    "load",
-    () => {
-
-        console.log(
-            "JANOVA Patient Care System Started"
-        );
-
-    }
-);
-
-
-
-/*
-==================================================
-FUTURE FIREBASE FUNCTION
-==================================================
-
-Firebase connect பண்ணும்போது
-இந்த function-ஐ பயன்படுத்துவோம்.
-
-Example:
-
-listenForPatientCommand(command)
-
-command = HELP
-command = WATER
-command = FOOD
-command = YES
-command = NO
-
-==================================================
-*/
-
+// ======================================================
+// RECEIVE ESP32 COMMAND
+// ======================================================
 
 function receiveESP32Command(command) {
+
+    if (!command) return;
+
 
     command =
         String(command)
@@ -250,12 +319,181 @@ function receiveESP32Command(command) {
         .toUpperCase();
 
 
+    console.log(
+        "ESP32 → Firebase → JANOVA APP:",
+        command
+    );
+
+
     if (
         commands[command]
     ) {
 
-        showCommand(command);
+        showCommand(
+            command
+        );
 
     }
 
 }
+
+
+// ======================================================
+// FIREBASE REALTIME DATABASE
+// PATIENT PATH
+// ======================================================
+//
+// ESP32 will eventually write:
+//
+// janova
+// └── patient01
+// ├── command: "WATER"
+// ├── timestamp: ...
+// └── device: "ESP32-01"
+//
+// ======================================================
+
+const patientRef =
+    ref(
+        db,
+        "janova/patient01"
+    );
+
+
+// ======================================================
+// LISTEN FOR REALTIME DATA
+// ======================================================
+
+onValue(
+
+    patientRef,
+
+    (snapshot) => {
+
+        const data =
+            snapshot.val();
+
+
+        console.log(
+            "Firebase data received:",
+            data
+        );
+
+
+        // Firebase connection successful
+
+        if (connectionText) {
+
+            connectionText.textContent =
+                "ESP32 / CLOUD ONLINE";
+
+        }
+
+
+        if (networkStatus) {
+
+            networkStatus.textContent =
+                "ONLINE";
+
+        }
+
+
+        // No data yet
+
+        if (!data) {
+
+            console.log(
+                "Waiting for patient data..."
+            );
+
+            return;
+
+        }
+
+
+        // Get command
+
+        if (data.command) {
+
+            receiveESP32Command(
+                data.command
+            );
+
+        }
+
+    },
+
+
+    (error) => {
+
+        console.error(
+            "Firebase error:",
+            error
+        );
+
+
+        if (connectionText) {
+
+            connectionText.textContent =
+                "DATABASE ERROR";
+
+        }
+
+
+        if (networkStatus) {
+
+            networkStatus.textContent =
+                "OFFLINE";
+
+        }
+
+    }
+
+);
+
+
+// ======================================================
+// PAGE START
+// ======================================================
+
+window.addEventListener(
+    "load",
+    () => {
+
+        console.log(
+            "================================"
+        );
+
+        console.log(
+            "JANOVA TECHNOLOGIES"
+        );
+
+        console.log(
+            "Patient Care Assistant Started"
+        );
+
+        console.log(
+            "Firebase Realtime Database Ready"
+        );
+
+        console.log(
+            "================================"
+        );
+
+    }
+);
+
+
+// ======================================================
+// TEST COMMANDS
+// ======================================================
+//
+// Browser console-ல்:
+//
+// simulateCommand("HELP")
+// simulateCommand("WATER")
+// simulateCommand("FOOD")
+// simulateCommand("YES")
+// simulateCommand("NO")
+//
+// ======================================================
